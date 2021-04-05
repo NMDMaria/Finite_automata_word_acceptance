@@ -1,2 +1,3 @@
 # Tema_LFA
-::: do for DFA & NFA - comment with tuple instead of namedtuple
+::: do for DFA & NFA - comment with tuple instead of namedtuple -> DONE
+::: do more tests
