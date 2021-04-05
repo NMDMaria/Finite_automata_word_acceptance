@@ -32,20 +32,20 @@ Fisierul suplimentar "succesiune.out" de forma:
         ...
 """
 
-from collections import namedtuple
-tranzitie = namedtuple("tranzitie", "unde caracter")
-
-"""
-Folosind namedtuple creez un tuplu unde:
-    tranzitie[0] -> unde 
-    tranzitie[1] -> caracter
-Ceea ce ar echivala oarecum "class tranzitie" din c++.
-Diferenta dintre namedtuple si tuple normal tine de afisare:
-    - tuple normal: (var1, var2, ...)
-    - namedtuple: name("nume_var1"=var1, "nume_var2"=var2, ...)
-Folosirea namedtuple nu este necesară pentru functionarea programului. Fiecare "tranzitie" poate fi inlocuita cu "tuple" si programul ar functiona la fel.
-Pentru fiecare namedtuple este o versiune comentată cu declararea tuple normal, daca se decomenteaza versiunea normala si se comenteaza cea named programul functioneaza la fel, fara a folosi librarii suplimentare.
-"""
+# from collections import namedtuple
+# tranzitie = namedtuple("tranzitie", "unde caracter")
+#
+# """
+# Folosind namedtuple creez un tuplu unde:
+#     tranzitie[0] -> unde
+#     tranzitie[1] -> caracter
+# Ceea ce ar echivala oarecum "class tranzitie" din c++.
+# Diferenta dintre namedtuple si tuple normal tine de afisare:
+#     - tuple normal: (var1, var2, ...)
+#     - namedtuple: name("nume_var1"=var1, "nume_var2"=var2, ...)
+# Folosirea namedtuple nu este necesară pentru functionarea programului. Fiecare "tranzitie" poate fi inlocuita cu "tuple" si programul ar functiona la fel.
+# Pentru fiecare namedtuple este o versiune comentată cu declararea tuple normal, daca se decomenteaza versiunea normala si se comenteaza cea named programul functioneaza la fel, fara a folosi librarii suplimentare.
+# """
 
 
 def verificare(cuv):
@@ -57,39 +57,33 @@ def verificare(cuv):
         :param solutie_stari: lista cu succesiunile de noduri care dau solutie
         Functie recursiva.
 
-        Cazul cuvantului vid -> verificam daca S este in F -> daca da adaugam la solutie
-        Caz cuvant normal:
-            - verific daca am ajuns la o stare a automatului (nu trebuie neaparat pentru ca nu ies niciodata din starile automatului)
-            - trec prin fiecare tranzitie care pleaca din "stare" :
-                    - daca litera tranzitiei este la indexul cautat (i) in cuvant:
-                                - adaug "stare" in "succesiune"
-                                - daca i este chiar ultima litera din cuvantul verificat: -> nu mai fac alt apel, deci nu pot depasi niciodata numarul de litere din cuvant
-                                        - verific daca starea/nodul in care ajung prin tranzitie este in F
-                                                => daca este o adaug la "succesiune", cresc numarul de solutii si adaug la "solutie_stari" succesiunea curenta
-                                                - sterg starea/nodul adaugat din succesiune (pt. a ma asigura ca la un alt apel al functiei nu am acest nod ca si parcurs)
-                                - altfel -> nu am depasit numarul de litere din cuvant
-                                        - apelez parcurgere(starea unde m-a dus tranzitia procesata, i + 1 -> caut alta litera, "succesiune", "solutie_stari")
-                                - scot "stare" din "succesiune" (pt. a ma asigura ca la un alt apel al functiei nu am acest nod ca si parcurs - ceea ce ar fi ernoat)
+        - verific daca am ajuns la o stare a automatului (nu trebuie neaparat pentru ca nu ies niciodata din starile automatului)
+        - trec prin fiecare tranzitie care pleaca din "stare" :
+                - daca litera tranzitiei este la indexul cautat (i) in cuvant:
+                            - adaug "stare" in "succesiune"
+                            - daca i este chiar ultima litera din cuvantul verificat: -> nu mai fac alt apel, deci nu pot depasi niciodata numarul de litere din cuvant
+                                    - verific daca starea/nodul in care ajung prin tranzitie este in F
+                                            => daca este o adaug la "succesiune", cresc numarul de solutii si adaug la "solutie_stari" succesiunea curenta
+                                            - sterg starea/nodul adaugat din succesiune (pt. a ma asigura ca la un alt apel al functiei nu am acest nod ca si parcurs)
+                            - altfel -> nu am depasit numarul de litere din cuvant
+                                    - apelez parcurgere(starea unde m-a dus tranzitia procesata, i + 1 -> caut alta litera, "succesiune", "solutie_stari")
+                            - scot "stare" din "succesiune" (pt. a ma asigura ca la un alt apel al functiei nu am acest nod ca si parcurs - ceea ce ar fi ernoat)
         """
         global solutie
-        if cuv == "":
-            if S in F:
-                solutie_stari.append([S])
-                solutie = solutie + 1
-        else:
-            if stare in stari:
-                for t in stari[stare]:
-                    if t[1] == cuv[i]:
-                        succesiune.append(stare)
-                        if i == len(cuv) - 1:
-                            if t[0] in F:
-                                succesiune.append(t[0])
-                                solutie = solutie + 1
-                                solutie_stari.append([i for i in succesiune])
-                                succesiune.pop(len(succesiune) - 1)
-                        else:
-                            parcurgere(t[0], i + 1, succesiune, solutie_stari)
-                        succesiune.pop(len(succesiune) - 1)
+
+        if stare in stari:
+            for t in stari[stare]:
+                if t[1] == cuv[i]:
+                    succesiune.append(stare)
+                    if i == len(cuv) - 1:
+                        if t[0] in F:
+                            succesiune.append(t[0])
+                            solutie = solutie + 1
+                            solutie_stari.append([i for i in succesiune])
+                            succesiune.pop(len(succesiune) - 1)
+                    else:
+                        parcurgere(t[0], i + 1, succesiune, solutie_stari)
+                    succesiune.pop(len(succesiune) - 1)
 
     global S, F, stari, solutie, solutie_stari
     """
@@ -102,7 +96,12 @@ def verificare(cuv):
     """
     solutie = 0
     solutie_stari = []
-    parcurgere(S, 0, [], solutie_stari)
+    if cuv == "":
+        if S in F:
+            solutie_stari.append([S])
+            solutie = solutie + 1
+    else:
+        parcurgere(S, 0, [], solutie_stari)
     return solutie
 
 
@@ -140,7 +139,7 @@ for i in range(N):
 M = int(f.readline().strip())
 for i in range(M):
     aux = f.readline().strip().split()
-    t = tranzitie(int(aux[1]), aux[2])
+    t = (int(aux[1]), aux[2])
     stari[int(aux[0])].append(t)
 S = int(f.readline().strip())
 nrF = int(f.readline().strip())
