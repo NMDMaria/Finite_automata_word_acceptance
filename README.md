@@ -1,3 +1,3 @@
 # Tema_LFA
-::: do for DFA & NFA - comment with tuple instead of namedtuple -> DONE
-::: do more tests
+-> scoate "if stari ... " din DFA
+Seems ok too lazy to do more tests
