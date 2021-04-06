@@ -52,29 +52,20 @@ def verificare(cuv):
                             - altfel -> nu am depasit numarul de litere din cuvant
                                     - apelez parcurgere(starea unde m-a dus tranzitia procesata, i + 1 -> caut alta litera, "succesiune", "solutie_stari")
                             - scot "stare" din "succesiune" (pt. a ma asigura ca la un alt apel al functiei nu am acest nod ca si parcurs - ceea ce ar fi ernoat)
-                - daca litera tranzitiei este "lambda":
-                            - adaug "stare" in "succesiune"
-                            - apelez parcurgere(starea unde m-a dus tranzitia procesata, i -> nu am adaugat o litera, dar pot sa schimb starea, "succesiune", "solutie_stari")
-                            - scot "stare" din "succesiune" (pt. a ma asigura ca la un alt apel al functiei nu am acest nod ca si parcurs - ceea ce ar fi ernoat)
         """
         global solutie
-        if stare in stari:
-            for t in stari[stare]:
-                if t[1] == cuv[i]:
-                    succesiune.append(stare)
-                    if i == len(cuv) - 1:
-                        if t[0] in F:
-                            succesiune.append(t[0])
-                            solutie = solutie + 1
-                            solutie_stari.append([i for i in succesiune])
-                            succesiune.pop(len(succesiune) - 1)
-                    else:
-                        parcurgere(t[0], i + 1, succesiune, solutie_stari)
-                    succesiune.pop(len(succesiune) - 1)
-                if t[1] == "lamda":
-                    succesiune.append(stare)
-                    parcurgere(t[0], i, succesiune, solutie_stari)
-                    succesiune.pop(len(succesiune) - 1)
+        for t in stari[stare]:
+            if t[1] == cuv[i]:
+                succesiune.append(stare)
+                if i == len(cuv) - 1:
+                    if t[0] in F:
+                        succesiune.append(t[0])
+                        solutie = solutie + 1
+                        solutie_stari.append([i for i in succesiune]) # daca dau append direct imi da append la un pointer la un vector local -> in main nu mai am succesiunea
+                        succesiune.pop(len(succesiune) - 1)
+                else:
+                    parcurgere(t[0], i + 1, succesiune, solutie_stari)
+                succesiune.pop(len(succesiune) - 1)
 
     global S, F, stari, solutie, solutie_stari
     """
