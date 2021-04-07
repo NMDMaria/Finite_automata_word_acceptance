@@ -32,21 +32,6 @@ Fisierul suplimentar "succesiune.out" de forma:
         ...
 """
 
-# from collections import namedtuple
-# tranzitie = namedtuple("tranzitie", "unde caracter")
-#
-# """
-# Folosind namedtuple creez un tuplu unde:
-#     tranzitie[0] -> unde
-#     tranzitie[1] -> caracter
-# Ceea ce ar echivala oarecum "class tranzitie" din c++.
-# Diferenta dintre namedtuple si tuple normal tine de afisare:
-#     - tuple normal: (var1, var2, ...)
-#     - namedtuple: name("nume_var1"=var1, "nume_var2"=var2, ...)
-# Folosirea namedtuple nu este necesară pentru functionarea programului. Fiecare "tranzitie" poate fi inlocuita cu "tuple" si programul ar functiona la fel.
-# Pentru fiecare namedtuple este o versiune comentată cu declararea tuple normal, daca se decomenteaza versiunea normala si se comenteaza cea named programul functioneaza la fel, fara a folosi librarii suplimentare.
-# """
-
 
 def verificare(cuv):
     def parcurgere(stare, i, succesiune, solutie_stari):
@@ -55,9 +40,8 @@ def verificare(cuv):
         :param i: indexul la care ne aflam in cuvantul de verificat
         :param succesiune: lista cu nodurile/starile procesate (corect pt. cuvant) pana acum
         :param solutie_stari: lista cu succesiunile de noduri care dau solutie
-        Functie recursiva.
+        Functie recursiva - DFS.
 
-        - verific daca am ajuns la o stare a automatului (nu trebuie neaparat pentru ca nu ies niciodata din starile automatului)
         - trec prin fiecare tranzitie care pleaca din "stare" :
                 - daca litera tranzitiei este la indexul cautat (i) in cuvant:
                             - adaug "stare" in "succesiune"
@@ -71,19 +55,18 @@ def verificare(cuv):
         """
         global solutie
 
-        if stare in stari:
-            for t in stari[stare]:
-                if t[1] == cuv[i]:
-                    succesiune.append(stare)
-                    if i == len(cuv) - 1:
-                        if t[0] in F:
-                            succesiune.append(t[0])
-                            solutie = solutie + 1
-                            solutie_stari.append([i for i in succesiune])
-                            succesiune.pop(len(succesiune) - 1)
-                    else:
-                        parcurgere(t[0], i + 1, succesiune, solutie_stari)
-                    succesiune.pop(len(succesiune) - 1)
+        for tranzitie in stari[stare]:
+            if tranzitie[1] == cuv[i]:
+                succesiune.append(stare)
+                if i == len(cuv) - 1:
+                    if tranzitie[0] in F:
+                        succesiune.append(tranzitie[0])
+                        solutie = solutie + 1
+                        solutie_stari.append([i for i in succesiune])
+                        succesiune.pop(len(succesiune) - 1)
+                else:
+                    parcurgere(tranzitie[0], i + 1, succesiune, solutie_stari)
+                succesiune.pop(len(succesiune) - 1)
 
     global S, F, stari, solutie, solutie_stari
     """
@@ -109,10 +92,8 @@ f = open("date.in", 'r')
 g = open("date.out", 'w')
 op = open("succesiune.out", 'w')
 """
-op = fisier suplimentar unde afisez ordinea succesiunilor de noduri/stari a solutiilor
-"""
+"succesiune.out" = fisier suplimentar unde afisez ordinea succesiunilor de noduri/stari a solutiilor
 
-"""
 stari = dictionar cu key: nod/stare, items: lista cu tranzitiile care pleaca din key
 aux = ajutor pentru citirea din fisier
 N, M, S, nrF, F, nrCuv cu semnificatiile date
