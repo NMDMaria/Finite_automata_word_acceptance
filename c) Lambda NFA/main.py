@@ -1,7 +1,4 @@
 """
-a)
-Negrut Maria Daniela 133
-
 Fisierul de intrare de forma:
         N
         s1 s2 s3 ... sN
