@@ -1,4 +1,7 @@
 """
+a)
+Negrut Maria Daniela 133
+
 Fisierul de intrare de forma:
         N
         s1 s2 s3 ... sN
@@ -22,35 +25,32 @@ Fisierul de iesire de forma:
         ...
         DA/NU
         --- de nrCuv ori
-Fisierul suplimentar "succesiune.out" de forma:
-        cuv1
-        succesiune1_1 succesiune1_2 ... succesiune1_n
-        ...
-        succesiuneM_1 succesiuneM_2 ... succesiuneM_n
-        cuv2
-        ...
-        ...
 """
 
 
-def verificare(cuv): # teoretic merge cu 'lamda' -> trebuie testata
+def verificare(cuv):
     def parcurgere(stare, i):
         global solutie, last_tranzitie
         for tranzitie in stari[stare]:
             if tranzitie[1] == cuv[i]:
-                if i == len(cuv) - 1:
-                    if tranzitie[0] in F:
-                        solutie = solutie + 1
-                else:
-                    parcurgere(tranzitie[0], i + 1)
-            elif tranzitie[1] == 'lamda' and last_tranzitie != (stare, tranzitie[0], tranzitie[1]):
-                last_tranzitie = (stare, tranzitie[0], tranzitie[1])
+                # print(cuv, stare, tranzitie[0], tranzitie[1])
                 if i == len(cuv) - 1:
                     if tranzitie[0] in F:
                         solutie = solutie + 1
                     else:
-                        parcurgere(tranzitie[0], i)
-
+                        for tranzitie2 in stari[tranzitie[0]]:
+                            if tranzitie2[1] == 'lamda':
+                                if tranzitie2[0] in F:
+                                    solutie = solutie + 1
+                else:
+                    parcurgere(tranzitie[0], i + 1)
+            elif tranzitie[1] == 'lamda' and last_tranzitie != (stare, tranzitie[0], tranzitie[1]):
+                last_tranzitie = (stare, tranzitie[0], tranzitie[1])
+                if i - 1 == len(cuv) - 1:
+                    if tranzitie[0] in F:
+                        solutie = solutie + 1
+                else:
+                    parcurgere(tranzitie[0], i)
 
     global S, F, stari, solutie, last_tranzitie
     solutie = 0
@@ -66,8 +66,6 @@ def verificare(cuv): # teoretic merge cu 'lamda' -> trebuie testata
 f = open("date.in", 'r')
 g = open("date.out", 'w')
 """
-"succesiune.out" = fisier suplimentar unde afisez ordinea succesiunilor de noduri/stari a solutiilor
-
 stari = dictionar cu key: nod/stare, items: lista cu tranzitiile - tuple -  care pleaca din key
 aux = ajutor pentru citirea din fisier
 N, M, S, nrF, F, nrCuv cu semnificatiile date
